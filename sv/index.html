@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex">
+<title>단모음 소리 듣기</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Jua&family=Fredoka:wght@500;600;700&family=Noto+Sans+KR:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#2A2229;--gray:#6B6168;--bg:#FFFDF9;--c:#D63A7A;--t:#FCE8F0;--b:#F3C6D8}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;background:var(--bg);color:var(--ink);font-family:'Noto Sans KR',sans-serif}
+main{max-width:480px;min-height:100dvh;margin:0 auto;padding:20px 16px calc(20px + env(safe-area-inset-bottom));display:flex;flex-direction:column;align-items:center}
+button{font:inherit;color:inherit;border:0;background:none;cursor:pointer;padding:0}
+button:focus-visible,a:focus-visible{outline:3px solid var(--ink);outline-offset:3px}
+.letter{font-family:'Fredoka',sans-serif;font-weight:700;font-size:88px;line-height:1;color:var(--c);margin-top:14px}
+.sound{font-family:'Fredoka',sans-serif;font-weight:600;font-size:22px;color:var(--c);background:var(--t);border-radius:999px;padding:5px 18px;margin-top:8px;min-height:44px;min-width:88px}
+.play{width:176px;height:176px;border-radius:50%;background:var(--c);color:#fff;display:flex;align-items:center;justify-content:center;margin-top:22px;box-shadow:0 10px 0 var(--b);transition:transform .08s,box-shadow .08s}
+.play:active{transform:translateY(6px);box-shadow:0 4px 0 var(--b)}
+.play svg{width:84px;height:84px;fill:currentColor}
+.hint{font-family:'Jua',sans-serif;font-size:27px;margin:28px 0 0;text-align:center;min-height:38px}
+.note{font-size:16px;color:var(--gray);margin:2px 0 0;text-align:center}
+.words{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;width:100%;margin-top:22px}
+.word{min-height:60px;background:#fff;border:3px solid var(--b);border-radius:20px;font-family:'Fredoka',sans-serif;font-weight:600;font-size:26px}
+.word:last-child:nth-child(odd){grid-column:1/-1}
+.word b{color:var(--c);font-weight:600}
+.word.on{background:var(--t);border-color:var(--c)}
+nav{display:flex;gap:8px;margin-top:auto;padding-top:24px;width:100%}
+nav a{flex:1;min-height:52px;display:flex;align-items:center;justify-content:center;border-radius:16px;background:#F3EFEA;color:var(--gray);text-decoration:none;font-family:'Fredoka',sans-serif;font-weight:600;font-size:24px}
+nav a[aria-current=true]{background:var(--c);color:#fff}
+footer{font-size:14px;color:var(--gray);margin-top:14px}
+@media (prefers-reduced-motion:reduce){.play{transition:none}}
+</style>
+</head>
+<body>
+<main>
+  <div class="letter" id="letter"></div>
+  <button class="sound" id="sound"></button>
+  <button class="play" id="play"></button>
+  <p class="hint" id="hint" role="status"></p>
+  <p class="note">단어를 눌러도 들을 수 있어요.</p>
+  <div class="words" id="words"></div>
+  <nav id="nav" aria-label="모음 고르기"></nav>
+  <footer>my.little.chatterbox</footer>
+</main>
+<script>
+const DATA={"a":[{"w":"sound","f":"a-sound.m4a","s":1.04,"e":1.58},{"w":"apple","f":"a-apple.m4a","s":4.78,"e":5.58},{"w":"ax","f":"a-ax.m4a","s":6.74,"e":7.62},{"w":"add","f":"a-add.m4a","s":8.94,"e":9.72},{"w":"ask","f":"a-ask.m4a","s":11.02,"e":11.88},{"w":"at","f":"a-at.m4a","s":13.04,"e":13.82}],"e":[{"w":"sound","f":"e-sound.m4a","s":1.54,"e":2.02},{"w":"egg","f":"e-egg.m4a","s":5.86,"e":6.5},{"w":"elf","f":"e-elf.m4a","s":8.06,"e":8.84},{"w":"edge","f":"e-edge.m4a","s":10.42,"e":11.04},{"w":"elbow","f":"e-elbow.m4a","s":12.54,"e":13.44},{"w":"exit","f":"e-exit.m4a","s":14.7,"e":15.38}],"i":[{"w":"sound","f":"i-sound.m4a","s":1.32,"e":1.64},{"w":"igloo","f":"i-igloo.m4a","s":5.72,"e":6.52},{"w":"it","f":"i-it.m4a","s":7.96,"e":8.54},{"w":"is","f":"i-is.m4a","s":10.1,"e":10.82},{"w":"if","f":"i-if.m4a","s":12.32,"e":13.02},{"w":"itch","f":"i-itch.m4a","s":14.56,"e":15.3}],"o":[{"w":"sound","f":"o-sound.m4a","s":1.68,"e":2.18},{"w":"octopus","f":"o-octopus.m4a","s":6.24,"e":7.36},{"w":"ox","f":"o-ox.m4a","s":8.62,"e":9.6},{"w":"odd","f":"o-odd.m4a","s":10.88,"e":11.72},{"w":"otter","f":"o-otter.m4a","s":13.16,"e":13.84},{"w":"olive","f":"o-olive.m4a","s":15.44,"e":16.3}],"u":[{"w":"sound","f":"u-sound.m4a","s":1.94,"e":2.32},{"w":"umbrella","f":"u-umbrella.m4a","s":6.24,"e":7.08},{"w":"up","f":"u-up.m4a","s":8.76,"e":9.4},{"w":"us","f":"u-us.m4a","s":10.86,"e":11.6},{"w":"upset","f":"u-upset.m4a","s":13.0,"e":13.9},{"w":"upper","f":"u-upper.m4a","s":15.56,"e":16.18}]};
+const COLORS={a:['#D63A7A','#FCE8F0','#F3C6D8'],e:['#C25E00','#FDEEDD','#F5D2AE'],i:['#1F8A4C','#E3F4EA','#B9E2C8'],o:['#2470D0','#E4EEFB','#BCD3F2'],u:['#7444C2','#EFE8FA','#D3C3EF']};
+const ICON={play:'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13a1 1 0 0 0 1.5.86l11-6.5a1 1 0 0 0 0-1.72l-11-6.5A1 1 0 0 0 8 5.5z"/></svg>',pause:'<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="6" y="5" width="4.5" height="14" rx="1.2"/><rect x="13.5" y="5" width="4.5" height="14" rx="1.2"/></svg>'};
+const $=id=>document.getElementById(id);
+const audio=new Audio();audio.preload='auto';
+let v='a',current=null;
+const idle=()=>$('hint').textContent='버튼을 눌러 들어 보세요';
+function setPlaying(on){$('play').innerHTML=on?ICON.pause:ICON.play;$('play').setAttribute('aria-label',on?'멈추기':v+' 소리 전체 듣기');}
+function mark(w){document.querySelectorAll('.word').forEach(b=>b.classList.toggle('on',b.dataset.w===w));}
+function start(file,kind){current=kind;audio.src='audio/'+file;audio.currentTime=0;audio.play().catch(()=>{$('hint').textContent='다시 한 번 눌러 주세요';setPlaying(false);});}
+function stop(){audio.pause();current=null;setPlaying(false);mark(null);idle();}
+function render(){
+  const c=COLORS[v],s=document.documentElement.style;s.setProperty('--c',c[0]);s.setProperty('--t',c[1]);s.setProperty('--b',c[2]);
+  $('letter').textContent=v;$('sound').textContent='/'+v+'/';$('sound').setAttribute('aria-label','짧은 '+v+' 소리만 듣기');
+  $('words').innerHTML='';
+  DATA[v].filter(x=>x.w!=='sound').forEach(x=>{const b=document.createElement('button');b.className='word';b.dataset.w=x.w;
+    const f=document.createElement('b');f.textContent=x.w[0];b.append(f,x.w.slice(1));
+    b.onclick=()=>{mark(x.w);setPlaying(false);start(x.f,'word');};$('words').append(b);});
+  $('nav').querySelectorAll('a').forEach(a=>a.setAttribute('aria-current',a.dataset.v===v));
+  audio.src='audio/'+v+'.m4a';current=null;setPlaying(false);mark(null);idle();
+}
+Object.keys(DATA).forEach(k=>{const a=document.createElement('a');a.href='#'+k;a.textContent=k;a.dataset.v=k;$('nav').append(a);});
+$('play').onclick=()=>{if(current==='all'&&!audio.paused){stop();return;}mark(null);setPlaying(true);$('hint').textContent='따라 말해 보세요';start(v+'.m4a','all');};
+$('sound').onclick=()=>{mark(null);setPlaying(false);start(DATA[v][0].f,'sound');};
+audio.addEventListener('timeupdate',()=>{if(current!=='all')return;const t=audio.currentTime,x=DATA[v].find(d=>t>=d.s&&t<d.e&&d.w!=='sound');mark(x?x.w:null);});
+audio.addEventListener('ended',()=>{current=null;setPlaying(false);mark(null);idle();});
+audio.addEventListener('error',()=>{if(audio.getAttribute('src'))$('hint').textContent='소리를 불러오지 못했어요. 새로고침해 주세요.';});
+function route(){const h=location.hash.slice(1).toLowerCase();v=DATA[h]?h:'a';audio.pause();render();}
+addEventListener('hashchange',route);route();
+</script>
+</body>
+</html>
