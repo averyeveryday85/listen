@@ -45,7 +45,7 @@ footer{font-size:14px;color:var(--gray);margin-top:14px}
   <footer>my.little.chatterbox</footer>
 </main>
 <script>
-const DATA={"a":[{"w":"sound","f":"a-sound.m4a","s":1.04,"e":1.58},{"w":"apple","f":"a-apple.m4a","s":4.78,"e":5.58},{"w":"ax","f":"a-ax.m4a","s":6.74,"e":7.62},{"w":"add","f":"a-add.m4a","s":8.94,"e":9.72},{"w":"ask","f":"a-ask.m4a","s":11.02,"e":11.88},{"w":"at","f":"a-at.m4a","s":13.04,"e":13.82}],"e":[{"w":"sound","f":"e-sound.m4a","s":1.54,"e":2.02},{"w":"egg","f":"e-egg.m4a","s":5.86,"e":6.5},{"w":"elf","f":"e-elf.m4a","s":8.06,"e":8.84},{"w":"edge","f":"e-edge.m4a","s":10.42,"e":11.04},{"w":"elbow","f":"e-elbow.m4a","s":12.54,"e":13.44},{"w":"exit","f":"e-exit.m4a","s":14.7,"e":15.38}],"i":[{"w":"sound","f":"i-sound.m4a","s":1.32,"e":1.64},{"w":"igloo","f":"i-igloo.m4a","s":5.72,"e":6.52},{"w":"it","f":"i-it.m4a","s":7.96,"e":8.54},{"w":"is","f":"i-is.m4a","s":10.1,"e":10.82},{"w":"if","f":"i-if.m4a","s":12.32,"e":13.02},{"w":"itch","f":"i-itch.m4a","s":14.56,"e":15.26}],"o":[{"w":"sound","f":"o-sound.m4a","s":1.68,"e":2.18},{"w":"octopus","f":"o-octopus.m4a","s":6.24,"e":7.36},{"w":"ox","f":"o-ox.m4a","s":8.62,"e":9.6},{"w":"odd","f":"o-odd.m4a","s":10.88,"e":11.72},{"w":"otter","f":"o-otter.m4a","s":13.16,"e":13.84},{"w":"olive","f":"o-olive.m4a","s":15.44,"e":16.3}],"u":[{"w":"sound","f":"u-sound.m4a","s":1.94,"e":2.32},{"w":"umbrella","f":"u-umbrella.m4a","s":6.24,"e":7.08},{"w":"up","f":"u-up.m4a","s":8.76,"e":9.4},{"w":"us","f":"u-us.m4a","s":10.86,"e":11.6},{"w":"upset","f":"u-upset.m4a","s":13.0,"e":13.9},{"w":"upper","f":"u-upper.m4a","s":15.56,"e":16.18}]};
+const DATA={"a":[{"w":"sound","f":"a-sound.m4a","s":0.0,"e":0.54},{"w":"apple","f":"a-apple.m4a","s":3.74,"e":4.54},{"w":"ax","f":"a-ax.m4a","s":5.7,"e":6.58},{"w":"add","f":"a-add.m4a","s":7.9,"e":8.68},{"w":"ask","f":"a-ask.m4a","s":9.98,"e":10.84},{"w":"at","f":"a-at.m4a","s":12.0,"e":12.78}],"e":[{"w":"sound","f":"e-sound.m4a","s":0.0,"e":0.48},{"w":"egg","f":"e-egg.m4a","s":4.32,"e":4.96},{"w":"elf","f":"e-elf.m4a","s":6.52,"e":7.3},{"w":"edge","f":"e-edge.m4a","s":8.88,"e":9.5},{"w":"elbow","f":"e-elbow.m4a","s":11.0,"e":11.9},{"w":"exit","f":"e-exit.m4a","s":13.16,"e":13.84}],"i":[{"w":"sound","f":"i-sound.m4a","s":0.0,"e":0.32},{"w":"igloo","f":"i-igloo.m4a","s":4.4,"e":5.2},{"w":"it","f":"i-it.m4a","s":6.64,"e":7.22},{"w":"is","f":"i-is.m4a","s":8.78,"e":9.5},{"w":"if","f":"i-if.m4a","s":11.0,"e":11.7},{"w":"itch","f":"i-itch.m4a","s":13.24,"e":13.94}],"o":[{"w":"sound","f":"o-sound.m4a","s":0.0,"e":0.5},{"w":"octopus","f":"o-octopus.m4a","s":4.56,"e":5.68},{"w":"ox","f":"o-ox.m4a","s":6.94,"e":7.92},{"w":"odd","f":"o-odd.m4a","s":9.2,"e":10.04},{"w":"otter","f":"o-otter.m4a","s":11.48,"e":12.16},{"w":"olive","f":"o-olive.m4a","s":13.76,"e":14.62}],"u":[{"w":"sound","f":"u-sound.m4a","s":0.0,"e":0.38},{"w":"umbrella","f":"u-umbrella.m4a","s":4.3,"e":5.14},{"w":"up","f":"u-up.m4a","s":6.82,"e":7.46},{"w":"us","f":"u-us.m4a","s":8.92,"e":9.66},{"w":"upset","f":"u-upset.m4a","s":11.06,"e":11.96},{"w":"upper","f":"u-upper.m4a","s":13.62,"e":14.24}]};
 const COLORS={a:['#D63A7A','#FCE8F0','#F3C6D8'],e:['#C25E00','#FDEEDD','#F5D2AE'],i:['#1F8A4C','#E3F4EA','#B9E2C8'],o:['#2470D0','#E4EEFB','#BCD3F2'],u:['#7444C2','#EFE8FA','#D3C3EF']};
 const ICON={play:'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13a1 1 0 0 0 1.5.86l11-6.5a1 1 0 0 0 0-1.72l-11-6.5A1 1 0 0 0 8 5.5z"/></svg>',pause:'<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="6" y="5" width="4.5" height="14" rx="1.2"/><rect x="13.5" y="5" width="4.5" height="14" rx="1.2"/></svg>'};
 const $=id=>document.getElementById(id);
@@ -54,7 +54,18 @@ let v='a',current=null;
 const idle=()=>$('hint').textContent='버튼을 눌러 들어 보세요';
 function setPlaying(on){$('play').innerHTML=on?ICON.pause:ICON.play;$('play').setAttribute('aria-label',on?'멈추기':v+' 소리 전체 듣기');}
 function mark(w){document.querySelectorAll('.word').forEach(b=>b.classList.toggle('on',b.dataset.w===w));}
-function start(file,kind){current=kind;audio.src='audio/'+file+'?v=2';audio.currentTime=0;audio.play().catch(()=>{$('hint').textContent='다시 한 번 눌러 주세요';setPlaying(false);});}
+const blobs={};
+const netUrl=f=>'audio/'+f+'?v=3';
+async function preload(){
+  const order=[v,...Object.keys(DATA).filter(k=>k!==v)];
+  for(const k of order){
+    for(const f of [k+'.m4a',...DATA[k].map(x=>x.f)]){
+      if(blobs[f])continue;
+      try{const r=await fetch(netUrl(f));if(r.ok)blobs[f]=URL.createObjectURL(await r.blob());}catch(e){}
+    }
+  }
+}
+function start(file,kind){current=kind;audio.dataset.file=file;audio.src=blobs[file]||netUrl(file);audio.play().catch(()=>{$('hint').textContent='다시 한 번 눌러 주세요';setPlaying(false);});}
 function stop(){audio.pause();current=null;setPlaying(false);mark(null);idle();}
 function render(){
   const c=COLORS[v],s=document.documentElement.style;s.setProperty('--c',c[0]);s.setProperty('--t',c[1]);s.setProperty('--b',c[2]);
@@ -64,16 +75,16 @@ function render(){
     const f=document.createElement('b');f.textContent=x.w[0];b.append(f,x.w.slice(1));
     b.onclick=()=>{mark(x.w);setPlaying(false);start(x.f,'word');};$('words').append(b);});
   $('nav').querySelectorAll('a').forEach(a=>a.setAttribute('aria-current',a.dataset.v===v));
-  audio.src='audio/'+v+'.m4a?v=2';current=null;setPlaying(false);mark(null);idle();
+  current=null;setPlaying(false);mark(null);idle();
 }
 Object.keys(DATA).forEach(k=>{const a=document.createElement('a');a.href='#'+k;a.textContent=k;a.dataset.v=k;$('nav').append(a);});
 $('play').onclick=()=>{if(current==='all'&&!audio.paused){stop();return;}mark(null);setPlaying(true);$('hint').textContent='따라 말해 보세요';start(v+'.m4a','all');};
 $('sound').onclick=()=>{mark(null);setPlaying(false);start(DATA[v][0].f,'sound');};
 audio.addEventListener('timeupdate',()=>{if(current!=='all')return;const t=audio.currentTime,x=DATA[v].find(d=>t>=d.s&&t<d.e&&d.w!=='sound');mark(x?x.w:null);});
 audio.addEventListener('ended',()=>{current=null;setPlaying(false);mark(null);idle();});
-audio.addEventListener('error',()=>{if(audio.getAttribute('src'))$('hint').textContent='소리를 불러오지 못했어요. 새로고침해 주세요.';});
+audio.addEventListener('error',()=>{const f=audio.dataset.file;if(f&&blobs[f]&&audio.src===blobs[f]){delete blobs[f];audio.src=netUrl(f);audio.play().catch(()=>{});return;}if(audio.getAttribute('src'))$('hint').textContent='소리를 불러오지 못했어요. 새로고침해 주세요.';});
 function route(){const h=location.hash.slice(1).toLowerCase();v=DATA[h]?h:'a';audio.pause();render();}
-addEventListener('hashchange',route);route();
+addEventListener('hashchange',route);route();preload();
 </script>
 </body>
 </html>
