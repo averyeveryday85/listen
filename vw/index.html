@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex">
+<title>단모음 장모음 소리 듣기</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Jua&family=Fredoka:wght@500;600;700&family=Noto+Sans:wght@700&family=Noto+Sans+KR:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#2A2229;--gray:#6B6168;--bg:#FFFDF9;--s:#1F5FA8;--st:#E5EEF9;--sb:#BFD3EE;--l:#8C5A00;--lt:#FBF0DC;--lb:#EED7AA}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;background:var(--bg);color:var(--ink);font-family:'Noto Sans KR',sans-serif}
+main{max-width:480px;min-height:100dvh;margin:0 auto;padding:20px 16px calc(20px + env(safe-area-inset-bottom));display:flex;flex-direction:column;align-items:center}
+button{font:inherit;color:inherit;border:0;background:none;cursor:pointer;padding:0}
+button:focus-visible,a:focus-visible{outline:3px solid var(--ink);outline-offset:3px}
+.letter{font-family:'Fredoka',sans-serif;font-weight:700;font-size:80px;line-height:1;margin-top:10px}
+.pair{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;width:100%;margin-top:20px}
+.big{min-width:0;border-radius:28px;padding:18px 8px 16px;display:flex;flex-direction:column;align-items:center;gap:6px;transition:transform .08s,box-shadow .08s}
+.big:active{transform:translateY(5px)}
+.big.s{background:var(--s);color:#fff;box-shadow:0 8px 0 var(--sb)}
+.big.l{background:var(--l);color:#fff;box-shadow:0 8px 0 var(--lb)}
+.big .k{font-family:'Jua',sans-serif;font-size:22px}
+.big .sym{font-family:'Noto Sans',sans-serif;font-weight:700;font-size:40px;line-height:1.1}
+.big svg{width:40px;height:40px;fill:currentColor}
+.hint{font-family:'Jua',sans-serif;font-size:25px;margin:26px 0 0;text-align:center;min-height:36px}
+.note{font-size:16px;color:var(--gray);margin:2px 0 0;text-align:center}
+.words{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;width:100%;margin-top:18px}
+.word{min-height:60px;background:#fff;border:3px solid #E4DEE2;border-radius:20px;font-family:'Fredoka',sans-serif;font-weight:600;font-size:26px}
+.word.s b{color:var(--s);font-weight:600}.word.l b{color:var(--l);font-weight:600}
+.word.on.s{background:var(--st);border-color:var(--s)}.word.on.l{background:var(--lt);border-color:var(--l)}
+nav{display:flex;gap:8px;margin-top:auto;padding-top:24px;width:100%}
+nav a{flex:1;min-height:52px;display:flex;align-items:center;justify-content:center;border-radius:16px;background:#F3EFEA;color:var(--gray);text-decoration:none;font-family:'Fredoka',sans-serif;font-weight:600;font-size:24px}
+nav a[aria-current=true]{background:var(--ink);color:#fff}
+footer{font-size:14px;color:var(--gray);margin-top:14px}
+@media (prefers-reduced-motion:reduce){.big{transition:none}}
+</style>
+</head>
+<body>
+<main>
+  <div class="letter" id="letter"></div>
+  <div class="pair">
+    <button class="big s" id="short"><span class="k">단모음 · 소리</span><span class="sym" id="ssym"></span></button>
+    <button class="big l" id="long"><span class="k">장모음 · 이름</span><span class="sym" id="lsym"></span></button>
+  </div>
+  <p class="hint" id="hint" role="status"></p>
+  <p class="note">단어를 눌러도 들을 수 있어요.</p>
+  <div class="words" id="words"></div>
+  <nav id="nav" aria-label="모음 고르기"></nav>
+  <footer>my.little.chatterbox</footer>
+</main>
+<script>
+// 단모음 소리는 sv/의 같은 녹음(복사본). 장모음 소리와 단어는 새로 녹음해서 audio/에 넣기.
+const DATA={
+ a:{s:'ă',l:'ā',w:[['cap','cape'],['tap','tape'],['can','cane'],['mad','made']]},
+ e:{s:'ĕ',l:'ē',w:[['pet','Pete'],['them','theme']]},
+ i:{s:'ĭ',l:'ī',w:[['kit','kite'],['pin','pine'],['bit','bite'],['rid','ride']]},
+ o:{s:'ŏ',l:'ō',w:[['hop','hope'],['not','note'],['rod','rode'],['cod','code']]},
+ u:{s:'ŭ',l:'yū',w:[['cub','cube'],['cut','cute'],['tub','tube'],['us','use']]}};
+const $=id=>document.getElementById(id);
+const audio=new Audio();audio.preload='auto';
+let v='a';
+const idle=()=>$('hint').textContent='버튼을 눌러 들어 보세요';
+const url=f=>'audio/'+f+'?v=1';
+function mark(w){document.querySelectorAll('.word').forEach(b=>b.classList.toggle('on',b.dataset.w===w));}
+function play(f,msg){audio.src=url(f);$('hint').textContent=msg;audio.play().catch(()=>{$('hint').textContent='다시 한 번 눌러 주세요';});}
+function color(word,long){const i=word.toLowerCase().indexOf(v);const b=document.createElement('button');b.className='word '+(long?'l':'s');b.dataset.w=word;
+  const x=document.createElement('b');x.textContent=word[i];b.append(word.slice(0,i),x);
+  if(long){b.append(word.slice(i+1,-1));const e=document.createElement('b');e.textContent=word.slice(-1);b.append(e);}else b.append(word.slice(i+1));
+  b.onclick=()=>{mark(word);play(word.toLowerCase()+'.m4a','따라 말해 보세요');};return b;}
+function render(){const d=DATA[v];$('letter').textContent=v;$('ssym').textContent='/'+d.s+'/';$('lsym').textContent='/'+d.l+'/';
+  $('short').setAttribute('aria-label',v+' 단모음 소리 듣기');$('long').setAttribute('aria-label',v+' 장모음 이름 듣기');
+  $('words').innerHTML='';d.w.forEach(([s,l])=>{$('words').append(color(s,false),color(l,true));});
+  $('nav').querySelectorAll('a').forEach(a=>a.setAttribute('aria-current',a.dataset.v===v));mark(null);idle();}
+Object.keys(DATA).forEach(k=>{const a=document.createElement('a');a.href='#'+k;a.textContent=k;a.dataset.v=k;$('nav').append(a);});
+$('short').onclick=()=>{mark(null);play(v+'-short.m4a','소리를 따라 말해 보세요');};
+$('long').onclick=()=>{mark(null);play(v+'-long.m4a','이름을 따라 말해 보세요');};
+audio.addEventListener('ended',()=>{mark(null);idle();});
+audio.addEventListener('error',()=>{if(audio.getAttribute('src'))$('hint').textContent='소리를 불러오지 못했어요. 새로고침해 주세요.';});
+function route(){const h=location.hash.slice(1).toLowerCase();v=DATA[h]?h:'a';audio.pause();render();}
+addEventListener('hashchange',route);route();
+</script>
+</body>
+</html>

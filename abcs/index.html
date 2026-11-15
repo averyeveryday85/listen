@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex">
+<title>알파벳 소리 듣기</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Jua&family=Fredoka:wght@500;600;700&family=Noto+Sans+KR:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#2A2229;--gray:#6B6168;--bg:#FFFDF9;
+ --g:#1E7A5A;--gt:#E3F3EC;--gb:#B5DCCB;--k:#C2570F;--kt:#FCEDE2;--kb:#F2C9AB;--n:#5B5361;--nt:#F1EEF0;--nb:#DCD5DA}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;background:var(--bg);color:var(--ink);font-family:'Noto Sans KR',sans-serif}
+main{max-width:480px;min-height:100dvh;margin:0 auto;padding:20px 16px calc(20px + env(safe-area-inset-bottom))}
+button{font:inherit;color:inherit;border:0;background:none;cursor:pointer;padding:0}
+button:focus-visible,a:focus-visible{outline:3px solid var(--ink);outline-offset:3px}
+h1{font-family:'Jua',sans-serif;font-weight:400;font-size:30px;margin:6px 0 0;text-align:center}
+.lead{font-size:16px;color:var(--gray);text-align:center;margin:6px 0 0;line-height:1.5}
+.tabs{display:flex;gap:8px;margin:18px 0 0}
+.tabs a{flex:1;min-height:48px;display:flex;align-items:center;justify-content:center;border-radius:16px;background:#F3EFEA;color:var(--gray);text-decoration:none;font-family:'Jua',sans-serif;font-size:19px}
+.tabs a[aria-current=true]{background:var(--ink);color:#fff}
+.hint{position:sticky;top:0;z-index:2;background:var(--bg);font-family:'Jua',sans-serif;font-size:22px;margin:10px 0 0;padding:8px 0;text-align:center;min-height:46px}
+h2{font-family:'Jua',sans-serif;font-weight:400;font-size:22px;margin:18px 0 0;display:flex;align-items:center;gap:8px}
+h2 i{width:14px;height:14px;border-radius:50%;display:inline-block}
+h2 small{font-family:'Noto Sans KR',sans-serif;font-size:14px;color:var(--gray);font-weight:500}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:10px}
+.card{display:flex;border-radius:20px;overflow:hidden;border:3px solid var(--c2)}
+.card .snd{flex:0 0 46%;background:var(--c);color:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:10px 4px;min-height:84px;transition:transform .08s}
+.card .snd:active,.word:active{transform:translateY(3px)}
+.card .snd b{font-family:'Fredoka',sans-serif;font-weight:700;font-size:40px;line-height:1}
+.card .snd span{font-family:'Fredoka',sans-serif;font-weight:500;font-size:17px;opacity:.9}
+.card .wd{flex:1;background:#fff;font-family:'Fredoka',sans-serif;font-weight:600;font-size:24px;display:flex;align-items:center;justify-content:center}
+.card .wd u{text-decoration:none;color:var(--c)}
+.on{background:var(--t)!important}
+.g{--c:var(--g);--c2:var(--gb);--t:var(--gt)}.k{--c:var(--k);--c2:var(--kb);--t:var(--kt)}.n{--c:var(--n);--c2:var(--nb);--t:var(--nt)}
+.blend{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-top:10px}
+.word{min-height:60px;background:#fff;border:3px solid var(--c2);border-radius:18px;font-family:'Fredoka',sans-serif;font-weight:600;font-size:26px;transition:transform .08s}
+.word u{text-decoration:none;color:var(--c)}
+section[hidden]{display:none}
+footer{font-size:14px;color:var(--gray);margin-top:28px;text-align:center}
+@media (prefers-reduced-motion:reduce){.card .snd,.word{transition:none}}
+</style>
+</head>
+<body>
+<main>
+  <h1>알파벳 소리 듣기</h1>
+  <p class="lead">뒤에 /uh/를 붙이지 않은 깨끗한 소리예요.</p>
+  <nav class="tabs" aria-label="고르기">
+    <a href="#sound" data-t="sound">자음 소리</a>
+    <a href="#blend" data-t="blend">이어 읽기</a>
+  </nav>
+  <p class="hint" id="hint" role="status"></p>
+
+  <section id="s-sound">
+    <h2><i style="background:var(--g)"></i>늘이는 소리 <small>길게 쭉</small></h2>
+    <div class="grid" id="g"></div>
+    <h2><i style="background:var(--k)"></i>끊는 소리 <small>짧게 탁</small></h2>
+    <div class="grid" id="k"></div>
+    <h2><i style="background:var(--n)"></i>짧고 가볍게</h2>
+    <div class="grid" id="n"></div>
+  </section>
+
+  <section id="s-blend" hidden>
+    <h2><i style="background:var(--g)"></i>1단계 <small>늘이는 소리로 시작</small></h2>
+    <div class="blend" id="b1"></div>
+    <h2><i style="background:var(--k)"></i>2단계 <small>끊는 소리로 시작</small></h2>
+    <div class="blend" id="b2"></div>
+  </section>
+
+  <footer>my.little.chatterbox</footer>
+</main>
+<script>
+const G=[['f','fan'],['l','lip'],['m','map'],['n','net'],['r','rug'],['s','sun'],['v','van'],['z','zip']];
+const K=[['b','bat'],['c','cat','k'],['d','dog'],['g','gum'],['k','kid'],['p','pig'],['t','top']];
+const N=[['h','hat'],['j','jam'],['w','web'],['y','yes']];
+const B1=['map','sun','fan','lip','nap','sit'],B2=['bat','dog','pig','top','cup','kid'];
+const $=id=>document.getElementById(id);
+const audio=new Audio();audio.preload='auto';
+let cur=null;
+const idle=()=>$('hint').textContent='눌러서 들어 보세요';
+function mark(el){if(cur)cur.classList.remove('on');cur=el;if(el)el.classList.add('on');}
+function play(f,el,msg){mark(el);audio.src='audio/'+f+'.m4a?v=1';$('hint').textContent=msg;audio.play().catch(()=>{$('hint').textContent='다시 한 번 눌러 주세요';});}
+function card([l,w,sym],cls){
+  const d=document.createElement('div');d.className='card '+cls;
+  const s=document.createElement('button');s.className='snd';s.setAttribute('aria-label',l+' 소리 듣기');
+  const b=document.createElement('b');b.textContent=l;const sp=document.createElement('span');sp.textContent='/'+(sym||l)+'/';s.append(b,sp);
+  s.onclick=()=>play(l,s,'소리를 따라 해 보세요');
+  const x=document.createElement('button');x.className='wd';x.setAttribute('aria-label',w+' 듣기');
+  const u=document.createElement('u');u.textContent=w[0];x.append(u,w.slice(1));
+  x.onclick=()=>play(l+'-'+w,x,'단어를 따라 말해 보세요');
+  d.append(s,x);return d;}
+G.forEach(c=>$('g').append(card(c,'g')));K.forEach(c=>$('k').append(card(c,'k')));N.forEach(c=>$('n').append(card(c,'n')));
+function word(w,cls){const b=document.createElement('button');b.className='word '+cls;const u=document.createElement('u');u.textContent=w[0];b.append(u,w.slice(1));
+  b.onclick=()=>play('blend-'+w,b,'소리를 이어서 읽어 보세요');return b;}
+B1.forEach(w=>$('b1').append(word(w,'g')));B2.forEach(w=>$('b2').append(word(w,'k')));
+audio.addEventListener('ended',()=>{mark(null);idle();});
+audio.addEventListener('error',()=>{if(audio.getAttribute('src'))$('hint').textContent='소리를 불러오지 못했어요. 새로고침해 주세요.';});
+function route(){const t=location.hash.slice(1)==='blend'?'blend':'sound';audio.pause();mark(null);
+  $('s-sound').hidden=t!=='sound';$('s-blend').hidden=t!=='blend';
+  document.querySelectorAll('.tabs a').forEach(a=>a.setAttribute('aria-current',a.dataset.t===t));idle();}
+addEventListener('hashchange',route);route();
+</script>
+</body>
+</html>
