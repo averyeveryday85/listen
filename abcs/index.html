@@ -83,7 +83,7 @@ const audio=new Audio();audio.preload='auto';
 let cur=null;
 const idle=()=>$('hint').textContent='눌러서 들어 보세요';
 function mark(el){if(cur)cur.classList.remove('on');cur=el;if(el)el.classList.add('on');}
-function play(f,el,msg){mark(el);audio.src='audio/'+f+'.m4a?v=4';$('hint').textContent=msg;audio.play().catch(()=>{$('hint').textContent='다시 한 번 눌러 주세요';});}
+function play(f,el,msg){mark(el);audio.src='audio/'+f+'.m4a?v=5';$('hint').textContent=msg;audio.play().catch(()=>{$('hint').textContent='다시 한 번 눌러 주세요';});}
 function card([l,w,sym],cls){
   const d=document.createElement('div');d.className='card '+cls;
   const s=document.createElement('button');s.className='snd';s.setAttribute('aria-label',l+' 소리 듣기');
