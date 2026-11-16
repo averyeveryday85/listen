@@ -35,6 +35,9 @@ h2 small{font-family:'Noto Sans KR',sans-serif;font-size:14px;color:var(--gray);
 .on{background:var(--t)!important}
 .g{--c:var(--g);--c2:var(--gb);--t:var(--gt)}.k{--c:var(--k);--c2:var(--kb);--t:var(--kt)}.n{--c:var(--n);--c2:var(--nb);--t:var(--nt)}
 .blend{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-top:10px}
+.bw{display:flex;flex-direction:column;gap:6px}
+.seg{min-height:40px;background:var(--c2);color:var(--c);border:0;border-radius:14px;font-family:'Noto Sans KR',sans-serif;font-weight:700;font-size:14px;transition:transform .08s}
+.seg:active{transform:translateY(2px)}
 .word{min-height:60px;background:#fff;border:3px solid var(--c2);border-radius:18px;font-family:'Fredoka',sans-serif;font-weight:600;font-size:26px;transition:transform .08s}
 .word u{text-decoration:none;color:var(--c)}
 section[hidden]{display:none}
@@ -80,7 +83,7 @@ const audio=new Audio();audio.preload='auto';
 let cur=null;
 const idle=()=>$('hint').textContent='눌러서 들어 보세요';
 function mark(el){if(cur)cur.classList.remove('on');cur=el;if(el)el.classList.add('on');}
-function play(f,el,msg){mark(el);audio.src='audio/'+f+'.m4a?v=1';$('hint').textContent=msg;audio.play().catch(()=>{$('hint').textContent='다시 한 번 눌러 주세요';});}
+function play(f,el,msg){mark(el);audio.src='audio/'+f+'.m4a?v=2';$('hint').textContent=msg;audio.play().catch(()=>{$('hint').textContent='다시 한 번 눌러 주세요';});}
 function card([l,w,sym],cls){
   const d=document.createElement('div');d.className='card '+cls;
   const s=document.createElement('button');s.className='snd';s.setAttribute('aria-label',l+' 소리 듣기');
@@ -92,7 +95,10 @@ function card([l,w,sym],cls){
   d.append(s,x);return d;}
 G.forEach(c=>$('g').append(card(c,'g')));K.forEach(c=>$('k').append(card(c,'k')));N.forEach(c=>$('n').append(card(c,'n')));
 function word(w,cls){const b=document.createElement('button');b.className='word '+cls;const u=document.createElement('u');u.textContent=w[0];b.append(u,w.slice(1));
-  b.onclick=()=>play('blend-'+w,b,'소리를 이어서 읽어 보세요');return b;}
+  b.onclick=()=>play('blend-'+w,b,'소리를 이어서 읽어 보세요');
+  const sg=document.createElement('button');sg.className='seg '+cls;sg.textContent='소리 하나씩';sg.setAttribute('aria-label',w+' 소리 하나씩 듣기');
+  sg.onclick=()=>play('seg-'+w,sg,'소리 하나씩 듣고 이어서 읽어 보세요');
+  const d=document.createElement('div');d.className='bw';d.append(b,sg);return d;}
 B1.forEach(w=>$('b1').append(word(w,'g')));B2.forEach(w=>$('b2').append(word(w,'k')));
 audio.addEventListener('ended',()=>{mark(null);idle();});
 audio.addEventListener('error',()=>{if(audio.getAttribute('src'))$('hint').textContent='소리를 불러오지 못했어요. 새로고침해 주세요.';});
