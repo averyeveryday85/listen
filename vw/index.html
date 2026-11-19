@@ -61,7 +61,7 @@ const $=id=>document.getElementById(id);
 const audio=new Audio();audio.preload='auto';
 let v='a';
 const idle=()=>$('hint').textContent='버튼을 눌러 들어 보세요';
-const url=f=>'audio/'+f+'?v=3';
+const url=f=>'audio/'+f+'?v=4';
 function mark(w){document.querySelectorAll('.word').forEach(b=>b.classList.toggle('on',b.dataset.w===w));}
 function play(f,msg){audio.src=url(f);$('hint').textContent=msg;audio.play().catch(()=>{$('hint').textContent='다시 한 번 눌러 주세요';});}
 function color(word,long){const i=word.toLowerCase().indexOf(v);const b=document.createElement('button');b.className='word '+(long?'l':'s');b.dataset.w=word;
