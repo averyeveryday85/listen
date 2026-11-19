@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex">
+<title>the 읽기 소리 듣기</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Jua&family=Fredoka:wght@500;600;700&family=Noto+Sans:wght@700&family=Noto+Sans+KR:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#2A2229;--gray:#6B6168;--bg:#FFFDF9;--c:#2D6A9A;--ct:#E3EEF7;--cb:#BCD3E8;--v:#7A4E33;--vt:#F3E9E1;--vb:#DCC6B6}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;background:var(--bg);color:var(--ink);font-family:'Noto Sans KR',sans-serif}
+main{max-width:480px;min-height:100dvh;margin:0 auto;padding:20px 16px calc(20px + env(safe-area-inset-bottom));display:flex;flex-direction:column;align-items:center}
+button{font:inherit;color:inherit;border:0;background:none;cursor:pointer;padding:0}
+button:focus-visible{outline:3px solid var(--ink);outline-offset:3px}
+h1{font-family:'Fredoka',sans-serif;font-weight:700;font-size:56px;line-height:1;margin:10px 0 0}
+h1 span{font-family:'Jua',sans-serif;font-weight:400;font-size:30px;margin-left:6px}
+.all{margin-top:18px;width:100%;border-radius:24px;padding:16px 8px;background:var(--ink);color:#fff;box-shadow:0 7px 0 #CFC8CC;display:flex;align-items:center;justify-content:center;gap:10px;font-family:'Jua',sans-serif;font-size:24px;transition:transform .08s,box-shadow .08s}
+.all:active{transform:translateY(5px);box-shadow:0 2px 0 #CFC8CC}
+.all svg{width:28px;height:28px;fill:currentColor}
+.hint{font-family:'Jua',sans-serif;font-size:22px;margin:22px 0 0;text-align:center;min-height:32px}
+.note{font-size:15px;color:var(--gray);margin:2px 0 0;text-align:center;line-height:1.5}
+.list{display:flex;flex-direction:column;gap:10px;width:100%;margin-top:16px}
+.row{display:flex;align-items:center;gap:12px;min-height:62px;background:#fff;border:3px solid #E4DEE2;border-radius:20px;padding:6px 10px 6px 14px;text-align:left}
+.row .n{font-family:'Fredoka',sans-serif;font-weight:600;font-size:20px;color:var(--gray);width:24px}
+.row .w{flex:1;font-family:'Fredoka',sans-serif;font-weight:600;font-size:26px}
+.row .a{min-width:82px;height:44px;border-radius:14px;background:#F3EFEA;color:#B3AAB0;display:flex;align-items:center;justify-content:center;font-family:'Noto Sans',sans-serif;font-weight:700;font-size:22px}
+.row.c.shown .a{background:var(--c);color:#fff}.row.v.shown .a{background:var(--v);color:#fff}
+.row.on.c{background:var(--ct);border-color:var(--c)}.row.on.v{background:var(--vt);border-color:var(--v)}
+.key{display:flex;gap:8px;width:100%;margin-top:18px}
+.key div{flex:1;border-radius:16px;padding:10px 8px;text-align:center;font-size:15px;line-height:1.45}
+.key b{display:block;font-family:'Noto Sans',sans-serif;font-size:22px}
+.key .c{background:var(--ct);color:var(--c)}.key .v{background:var(--vt);color:var(--v)}
+footer{font-size:14px;color:var(--gray);margin-top:auto;padding-top:22px}
+@media (prefers-reduced-motion:reduce){.all{transition:none}}
+</style>
+</head>
+<body>
+<main>
+  <h1>the<span>읽기</span></h1>
+  <button class="all" id="all"></button>
+  <p class="hint" id="hint" role="status"></p>
+  <p class="note">단어를 누르면 소리를 듣고 정답을 볼 수 있어요.</p>
+  <div class="list" id="list"></div>
+  <div class="key">
+    <div class="c"><b>/ðə/</b>자음 소리 앞</div>
+    <div class="v"><b>/ði/</b>모음 소리 앞</div>
+  </div>
+  <footer>my.little.chatterbox</footer>
+</main>
+<script>
+// 활동지 3번(the 읽기) 순서. c = 자음 소리 앞 /ðə/, v = 모음 소리 앞 /ði/
+const DATA=[['hour','v'],['unicorn','c'],['house','c'],['egg','v'],['owl','v'],['year','c'],['uniform','c'],['apple','v'],['one','c'],['umbrella','v']];
+const SYM={c:'/ðə/',v:'/ði/'};
+const ICON={play:'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13a1 1 0 0 0 1.5.86l11-6.5a1 1 0 0 0 0-1.72l-11-6.5A1 1 0 0 0 8 5.5z"/></svg>',pause:'<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="6" y="5" width="4.5" height="14" rx="1.2"/><rect x="13.5" y="5" width="4.5" height="14" rx="1.2"/></svg>'};
+const $=id=>document.getElementById(id);
+const audio=new Audio();audio.preload='auto';
+const url=w=>'audio/'+w+'.m4a?v=1';
+let queue=null,timer=null;
+const idle=()=>$('hint').textContent='버튼을 눌러 들어 보세요';
+function setAll(on){$('all').innerHTML=(on?ICON.pause:ICON.play)+'<span>'+(on?'멈추기':'처음부터 전체 듣기')+'</span>';}
+function mark(i){document.querySelectorAll('.row').forEach((r,j)=>r.classList.toggle('on',j===i));}
+function reveal(i){const r=document.querySelectorAll('.row')[i];r.classList.add('shown');r.querySelector('.a').textContent=SYM[DATA[i][1]];}
+function play(i){const [w,t]=DATA[i];mark(i);reveal(i);audio.src=url(w);
+  $('hint').textContent=(t==='c'?'자음 소리 앞이라 ':'모음 소리 앞이라 ')+SYM[t]+'로 읽어요';
+  audio.play().catch(()=>{$('hint').textContent='다시 한 번 눌러 주세요';stop();});}
+function stop(){queue=null;clearTimeout(timer);setAll(false);}
+DATA.forEach(([w,t],i)=>{const b=document.createElement('button');b.className='row '+t;
+  b.innerHTML='<span class="n">'+(i+1)+'</span><span class="w">the '+w+'</span><span class="a" aria-hidden="true">?</span>';
+  b.setAttribute('aria-label',(i+1)+'번 the '+w+' 듣기');
+  b.onclick=()=>{stop();play(i);};$('list').append(b);});
+$('all').onclick=()=>{if(queue!==null){audio.pause();stop();mark(-1);idle();return;}queue=0;setAll(true);play(0);};
+audio.addEventListener('ended',()=>{if(queue!==null&&queue<DATA.length-1){queue++;timer=setTimeout(()=>play(queue),1200);}else{stop();setTimeout(()=>{if(audio.paused){mark(-1);}},600);}});
+audio.addEventListener('error',()=>{if(audio.getAttribute('src')){$('hint').textContent='소리를 불러오지 못했어요. 새로고침해 주세요.';stop();}});
+setAll(false);idle();
+</script>
+</body>
+</html>
