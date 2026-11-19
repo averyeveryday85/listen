@@ -25,12 +25,12 @@ h1 span{font-family:'Jua',sans-serif;font-weight:400;font-size:30px;margin-left:
 .row{display:flex;align-items:center;gap:12px;min-height:62px;background:#fff;border:3px solid #E4DEE2;border-radius:20px;padding:6px 10px 6px 14px;text-align:left}
 .row .n{font-family:'Fredoka',sans-serif;font-weight:600;font-size:20px;color:var(--gray);width:24px}
 .row .w{flex:1;font-family:'Fredoka',sans-serif;font-weight:600;font-size:26px}
-.row .a{min-width:82px;height:44px;border-radius:14px;background:#F3EFEA;color:#B3AAB0;display:flex;align-items:center;justify-content:center;font-family:'Noto Sans',sans-serif;font-weight:700;font-size:22px}
+.row .a{min-width:82px;height:44px;border-radius:14px;background:#F3EFEA;color:#B3AAB0;display:flex;align-items:center;justify-content:center;font-family:'Fredoka',sans-serif;font-weight:600;font-size:22px}
 .row.c.shown .a{background:var(--c);color:#fff}.row.v.shown .a{background:var(--v);color:#fff}
 .row.on.c{background:var(--ct);border-color:var(--c)}.row.on.v{background:var(--vt);border-color:var(--v)}
 .key{display:flex;gap:8px;width:100%;margin-top:18px}
 .key div{flex:1;border-radius:16px;padding:10px 8px;text-align:center;font-size:15px;line-height:1.45}
-.key b{display:block;font-family:'Noto Sans',sans-serif;font-size:22px}
+.key b{display:block;font-family:'Fredoka',sans-serif;font-weight:600;font-size:22px}
 .key .c{background:var(--ct);color:var(--c)}.key .v{background:var(--vt);color:var(--v)}
 footer{font-size:14px;color:var(--gray);margin-top:auto;padding-top:22px}
 @media (prefers-reduced-motion:reduce){.all{transition:none}}
@@ -44,15 +44,15 @@ footer{font-size:14px;color:var(--gray);margin-top:auto;padding-top:22px}
   <p class="note">단어를 누르면 소리를 듣고 정답을 볼 수 있어요.</p>
   <div class="list" id="list"></div>
   <div class="key">
-    <div class="c"><b>/ðə/</b>자음 소리 앞</div>
-    <div class="v"><b>/ði/</b>모음 소리 앞</div>
+    <div class="c"><b>thuh</b>자음 소리 앞</div>
+    <div class="v"><b>thee</b>모음 소리 앞</div>
   </div>
   <footer>my.little.chatterbox</footer>
 </main>
 <script>
-// 활동지 3번(the 읽기) 순서. c = 자음 소리 앞 /ðə/, v = 모음 소리 앞 /ði/
+// 활동지 3번(the 읽기) 순서. c = 자음 소리 앞 thuh, v = 모음 소리 앞 thee
 const DATA=[['hour','v'],['unicorn','c'],['house','c'],['egg','v'],['owl','v'],['year','c'],['uniform','c'],['apple','v'],['one','c'],['umbrella','v']];
-const SYM={c:'/ðə/',v:'/ði/'};
+const SYM={c:'thuh',v:'thee'};
 const ICON={play:'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13a1 1 0 0 0 1.5.86l11-6.5a1 1 0 0 0 0-1.72l-11-6.5A1 1 0 0 0 8 5.5z"/></svg>',pause:'<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="6" y="5" width="4.5" height="14" rx="1.2"/><rect x="13.5" y="5" width="4.5" height="14" rx="1.2"/></svg>'};
 const $=id=>document.getElementById(id);
 const audio=new Audio();audio.preload='auto';
