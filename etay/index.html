@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex">
+<title>et 단어 소리 듣기</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Jua&family=Fredoka:wght@500;600;700&family=Noto+Sans+KR:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#2A2229;--gray:#6B6168;--bg:#FFFDF9;--a:#3B77A8;--at:#EAF4FD;--ab:#BFDDF5;--k:#5C3A24;--kt:#F7F0EA;--kb:#E3D2C5}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;background:var(--bg);color:var(--ink);font-family:'Noto Sans KR',sans-serif}
+main{max-width:480px;min-height:100dvh;margin:0 auto;padding:20px 16px calc(20px + env(safe-area-inset-bottom));display:flex;flex-direction:column;align-items:center}
+button{font:inherit;color:inherit;border:0;background:none;cursor:pointer;padding:0}
+button:focus-visible{outline:3px solid var(--ink);outline-offset:3px}
+h1{font-family:'Jua',sans-serif;font-weight:400;font-size:40px;line-height:1.15;margin:10px 0 0;text-align:center;color:var(--k)}
+h1 b{font-family:'Fredoka',sans-serif;font-weight:700}
+.all{margin-top:18px;width:100%;border-radius:24px;padding:16px 8px;background:var(--ink);color:#fff;box-shadow:0 7px 0 #CFC8CC;display:flex;align-items:center;justify-content:center;gap:10px;font-family:'Jua',sans-serif;font-size:24px;transition:transform .08s,box-shadow .08s}
+.all:active{transform:translateY(5px);box-shadow:0 2px 0 #CFC8CC}
+.all svg{width:28px;height:28px;fill:currentColor}
+.hint{font-family:'Jua',sans-serif;font-size:22px;margin:20px 0 0;text-align:center;min-height:32px}
+.note{font-size:15px;color:var(--gray);margin:2px 0 0;text-align:center;line-height:1.5}
+.sec{width:100%;margin-top:18px}
+.sec h2{display:flex;align-items:center;gap:10px;margin:0 0 10px;font-family:'Jua',sans-serif;font-weight:400;font-size:22px}
+.pill{display:inline-flex;align-items:center;justify-content:center;min-width:48px;height:32px;padding:0 12px;border-radius:16px;color:#fff;font-family:'Fredoka',sans-serif;font-weight:600;font-size:19px}
+.a h2{color:var(--a)}.a .pill{background:var(--a)}
+.k h2{color:var(--k)}.k .pill{background:var(--k)}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.w{min-height:58px;border-radius:18px;border:3px solid;background:#fff;font-family:'Fredoka',sans-serif;font-weight:600;font-size:25px;display:flex;align-items:center;justify-content:center}
+.w i{font-style:normal;font-weight:700}
+.a .w{border-color:var(--ab)}.a .w i{color:var(--a)}
+.k .w{border-color:var(--kb)}.k .w i{color:var(--k)}
+.a .w.on{background:var(--a);border-color:var(--a);color:#fff}.a .w.on i{color:#fff}
+.k .w.on{background:var(--k);border-color:var(--k);color:#fff}.k .w.on i{color:#fff}
+footer{font-size:14px;color:var(--gray);margin-top:auto;padding-top:22px}
+@media (prefers-reduced-motion:reduce){.all{transition:none}}
+</style>
+</head>
+<body>
+<main>
+  <h1><b>et</b>를 <b>ay</b>로 읽을까<br><b>t</b>까지 읽을까</h1>
+  <button class="all" id="all"></button>
+  <p class="hint" id="hint" role="status"></p>
+  <p class="note">단어를 누르면 소리를 들을 수 있어요.</p>
+  <section class="sec a"><h2><span class="pill">ay</span>et를 ay로 읽어요</h2><div class="grid" id="ga"></div></section>
+  <section class="sec k"><h2><span class="pill">t</span>t까지 읽어요</h2><div class="grid" id="gk"></div></section>
+  <footer>my.little.chatterbox</footer>
+</main>
+<script>
+// 활동지 2쪽(단어 읽기) 순서. a = et를 ay로, k = t까지
+const A=['ballet','buffet','bouquet','beret','chalet','gourmet','sorbet','duvet','crochet','croquet','cabaret','parquet','sachet','ricochet','valet','filet','Monet','Chevrolet'];
+const K=['basket','ticket','pocket','jacket','rocket','puppet','carpet','blanket','helmet','magnet','planet','trumpet'];
+const LIST=[...A.map(w=>[w,'a']),...K.map(w=>[w,'k'])];
+const ICON={play:'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13a1 1 0 0 0 1.5.86l11-6.5a1 1 0 0 0 0-1.72l-11-6.5A1 1 0 0 0 8 5.5z"/></svg>',pause:'<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="6" y="5" width="4.5" height="14" rx="1.2"/><rect x="13.5" y="5" width="4.5" height="14" rx="1.2"/></svg>'};
+const $=id=>document.getElementById(id);
+const audio=new Audio();audio.preload='auto';
+const url=w=>'audio/'+w.toLowerCase()+'.m4a?v=1';
+let queue=null,timer=null;const btns=[];
+const idle=()=>$('hint').textContent='버튼을 눌러 들어 보세요';
+function setAll(on){$('all').innerHTML=(on?ICON.pause:ICON.play)+'<span>'+(on?'멈추기':'처음부터 전체 듣기')+'</span>';}
+function mark(i){btns.forEach((b,j)=>b.classList.toggle('on',j===i));}
+function play(i){const [w,t]=LIST[i];mark(i);audio.src=url(w);
+  $('hint').textContent=w+(t==='a'?' · et를 ay로':' · t까지');
+  audio.play().catch(()=>{$('hint').textContent='다시 한 번 눌러 주세요';stop();});}
+function stop(){queue=null;clearTimeout(timer);setAll(false);}
+LIST.forEach(([w,t],i)=>{const b=document.createElement('button');b.className='w';
+  b.innerHTML=w.slice(0,-2)+'<i>et</i>';b.setAttribute('aria-label',w+' 듣기');
+  b.onclick=()=>{stop();play(i);};btns.push(b);$(t==='a'?'ga':'gk').append(b);});
+$('all').onclick=()=>{if(queue!==null){audio.pause();stop();mark(-1);idle();return;}queue=0;setAll(true);play(0);};
+audio.addEventListener('ended',()=>{if(queue!==null&&queue<LIST.length-1){queue++;timer=setTimeout(()=>play(queue),1000);}else{stop();setTimeout(()=>{if(audio.paused){mark(-1);}},600);}});
+audio.addEventListener('error',()=>{if(audio.getAttribute('src')){$('hint').textContent='소리를 불러오지 못했어요. 새로고침해 주세요.';stop();}});
+setAll(false);idle();
+</script>
+</body>
+</html>
