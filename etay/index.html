@@ -39,16 +39,16 @@ footer{font-size:14px;color:var(--gray);margin-top:auto;padding-top:22px}
 </head>
 <body>
 <main>
-  <h1><b>et</b>를 <b>ay</b>로 읽을까<br><b>t</b>까지 읽을까</h1>
+  <h1><b>et</b>를 <b>ay</b>로 읽을까<br><b>t</b>도 소리를 내줄까</h1>
   <button class="all" id="all"></button>
   <p class="hint" id="hint" role="status"></p>
   <p class="note">단어를 누르면 소리를 들을 수 있어요.</p>
   <section class="sec a"><h2><span class="pill">ay</span>et를 ay로 읽어요</h2><div class="grid" id="ga"></div></section>
-  <section class="sec k"><h2><span class="pill">t</span>t까지 읽어요</h2><div class="grid" id="gk"></div></section>
+  <section class="sec k"><h2><span class="pill">t</span>t도 소리를 내줘요</h2><div class="grid" id="gk"></div></section>
   <footer>my.little.chatterbox</footer>
 </main>
 <script>
-// 활동지 2쪽(단어 읽기) 순서. a = et를 ay로, k = t까지
+// 활동지 2쪽(단어 읽기) 순서. a = et를 ay로, k = t도 소리를 내줌
 const A=['ballet','buffet','bouquet','beret','chalet','gourmet','sorbet','duvet','crochet','croquet','cabaret','parquet','sachet','ricochet','valet','filet','Monet','Chevrolet'];
 const K=['basket','ticket','pocket','jacket','rocket','puppet','carpet','blanket','helmet','magnet','planet','trumpet'];
 const LIST=[...A.map(w=>[w,'a']),...K.map(w=>[w,'k'])];
@@ -61,7 +61,7 @@ const idle=()=>$('hint').textContent='버튼을 눌러 들어 보세요';
 function setAll(on){$('all').innerHTML=(on?ICON.pause:ICON.play)+'<span>'+(on?'멈추기':'처음부터 전체 듣기')+'</span>';}
 function mark(i){btns.forEach((b,j)=>b.classList.toggle('on',j===i));}
 function play(i){const [w,t]=LIST[i];mark(i);audio.src=url(w);
-  $('hint').textContent=w+(t==='a'?' · et를 ay로':' · t까지');
+  $('hint').textContent=w+(t==='a'?' · et를 ay로':' · t도 소리를 내줘요');
   audio.play().catch(()=>{$('hint').textContent='다시 한 번 눌러 주세요';stop();});}
 function stop(){queue=null;clearTimeout(timer);setAll(false);}
 LIST.forEach(([w,t],i)=>{const b=document.createElement('button');b.className='w';
